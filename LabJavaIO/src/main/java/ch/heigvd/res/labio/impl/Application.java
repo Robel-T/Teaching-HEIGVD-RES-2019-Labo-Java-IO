@@ -7,12 +7,13 @@ import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
 import ch.heigvd.res.labio.quotes.QuoteClient;
 import ch.heigvd.res.labio.quotes.Quote;
-import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
+
+import java.io.*;
+import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -126,16 +127,19 @@ public class Application implements IApplication {
 
     //modifié
 
-    StringBuilder path = new StringBuilder(WORKSPACE_DIRECTORY);
-    for(String i: quote.getTags()){
-      path.append("/" + i);
-    }
+      String path = WORKSPACE_DIRECTORY;
+      for(String i: quote.getTags()){
+        path += "/" + i;
+      }
 
-    path.append("/" + filename);
-    File f = new File(path.toString());
-    f.getParentFile().mkdirs();
+      File f = new File(path.toString());
+      f.getParentFile().mkdirs();
+      path += "/" + filename;
 
-    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+      OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(path), Charsets.UTF_8);
+      w.write(quote.getQuote());
+
+   // throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
