@@ -17,7 +17,7 @@ import org.apache.commons.io.FileUtils;
 
 /**
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Robel Teklehaimanot
  */
 public class Application implements IApplication {
 
@@ -85,9 +85,11 @@ public class Application implements IApplication {
     QuoteClient client = new QuoteClient();
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
+
+      // modifié
       filename = "quote-" + Integer.toString(i) + ".utf8";
       storeQuote(quote,filename);
-      
+
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
       for (String tag : quote.getTags()) {
         LOG.info("> " + tag);
@@ -121,7 +123,19 @@ public class Application implements IApplication {
    * @throws IOException 
    */
   void storeQuote(Quote quote, String filename) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+
+    //modifié
+
+    StringBuilder path = new StringBuilder(WORKSPACE_DIRECTORY);
+    for(String i: quote.getTags()){
+      path.append("/" + i);
+    }
+
+    path.append("/" + filename);
+    File f = new File(path.toString());
+    f.getParentFile().mkdirs();
+
+    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
   }
   
   /**
@@ -133,11 +147,14 @@ public class Application implements IApplication {
     explorer.explore(new File(WORKSPACE_DIRECTORY), new IFileVisitor() {
       @Override
       public void visit(File file) {
-        /*
-         * There is a missing piece here. Notice how we use an anonymous class here. We provide the implementation
-         * of the the IFileVisitor interface inline. You just have to add the body of the visit method, which should
-         * be pretty easy (we want to write the filename, including the path, to the writer passed in argument).
-         */
+
+        //modifié
+        try{
+          writer.write(file.getPath());
+        }catch (IOException ex) {
+          LOG.log(Level.SEVERE, "Could not find path.", ex.getMessage());
+          ex.printStackTrace();
+        }
       }
     });
   }
