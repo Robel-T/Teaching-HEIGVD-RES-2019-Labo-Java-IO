@@ -13,10 +13,12 @@ import java.util.logging.Logger;
  *
  * Hello\n\World -> 1\Hello\n2\tWorld
  *
- * @author Olivier Liechti
+ * @author Olivier Liechti, Robel Teklehaimanot
  */
 public class FileNumberingFilterWriter extends FilterWriter {
 
+  private int ligne;
+  private static boolean n = false; // attendre n
   private static final Logger LOG = Logger.getLogger(FileNumberingFilterWriter.class.getName());
 
   public FileNumberingFilterWriter(Writer out) {
@@ -25,17 +27,41 @@ public class FileNumberingFilterWriter extends FilterWriter {
 
   @Override
   public void write(String str, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    write(str.toCharArray(), off, len);
   }
 
   @Override
   public void write(char[] cbuf, int off, int len) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
+    for(int i = off; i < off + len; i++){
+       write(cbuf[i]);
+    }
   }
 
   @Override
   public void write(int c) throws IOException {
-    throw new UnsupportedOperationException("The student has not implemented this method yet.");
-  }
+    if (ligne == 0) {
+      out.write(++ligne + "\t");
+    }
+    System.out.println((char)c);
 
+      if ((char)c == '\r') {
+            n = true;
+            out.write((char) c);
+
+      }
+
+      else if((char)c == '\n') {
+          n = false;
+          out.write((char) c);
+          out.write(++ligne + "\t");
+      }
+
+      else{
+        if(n){
+          out.write(++ligne + "\t");
+          n = false;
+        }
+        out.write((char)c);
+      }
+  }
 }

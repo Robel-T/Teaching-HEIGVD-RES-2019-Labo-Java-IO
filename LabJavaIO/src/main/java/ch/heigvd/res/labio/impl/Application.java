@@ -127,16 +127,18 @@ public class Application implements IApplication {
 
     //modifié
 
+
       String path = WORKSPACE_DIRECTORY;
       for(String i: quote.getTags()){
         path += "/" + i;
       }
 
+      FileOutputStream fileOS = new FileOutputStream(path);
       File f = new File(path.toString());
       f.getParentFile().mkdirs();
       path += "/" + filename;
 
-      OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(path), Charsets.UTF_8);
+      OutputStreamWriter w = new OutputStreamWriter(fileOS, Charsets.UTF_8);
       w.write(quote.getQuote());
 
    // throw new UnsupportedOperationException("The student has not implemented this method yet.");
