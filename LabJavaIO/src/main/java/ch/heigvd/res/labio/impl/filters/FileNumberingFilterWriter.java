@@ -42,7 +42,7 @@ public class FileNumberingFilterWriter extends FilterWriter {
     if (ligne == 0) {
       out.write(++ligne + "\t");
     }
-    System.out.println((char)c);
+    //System.out.println((char)c);
 
       if ((char)c == '\r') {
             n = true;
