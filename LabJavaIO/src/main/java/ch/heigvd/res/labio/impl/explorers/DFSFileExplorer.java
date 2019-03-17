@@ -2,7 +2,6 @@ package ch.heigvd.res.labio.impl.explorers;
 
 import ch.heigvd.res.labio.interfaces.IFileExplorer;
 import ch.heigvd.res.labio.interfaces.IFileVisitor;
-import sun.reflect.generics.visitor.Visitor;
 
 import java.io.File;
 import java.util.Arrays;
