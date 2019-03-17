@@ -10,6 +10,7 @@ import ch.heigvd.res.labio.quotes.Quote;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,11 +85,12 @@ public class Application implements IApplication {
     clearOutputDirectory();
     String filename;
     QuoteClient client = new QuoteClient();
+
     for (int i = 0; i < numberOfQuotes; i++) {
       Quote quote = client.fetchQuote();
 
       // modifié
-      filename = "quote-" + Integer.toString(i) + ".utf8";
+      filename = "quote-" + quote.getValue().getId() + ".utf8";
       storeQuote(quote,filename);
 
       LOG.info("Received a new joke with " + quote.getTags().size() + " tags.");
@@ -127,21 +129,17 @@ public class Application implements IApplication {
 
     //modifié
 
-
       String path = WORKSPACE_DIRECTORY;
       for(String i: quote.getTags()){
         path += "/" + i;
       }
 
-      FileOutputStream fileOS = new FileOutputStream(path);
-      File f = new File(path.toString());
-      f.getParentFile().mkdirs();
+      new File(path).mkdirs();
       path += "/" + filename;
 
-      OutputStreamWriter w = new OutputStreamWriter(fileOS, Charsets.UTF_8);
+      OutputStreamWriter w = new OutputStreamWriter(new FileOutputStream(path));
       w.write(quote.getQuote());
-
-   // throw new UnsupportedOperationException("The student has not implemented this method yet.");
+      w.close();
   }
   
   /**
@@ -156,9 +154,9 @@ public class Application implements IApplication {
 
         //modifié
         try{
-          writer.write(file.getPath());
+          writer.write(file.getPath() + "\n");
         }catch (IOException ex) {
-          LOG.log(Level.SEVERE, "Could not find path.", ex.getMessage());
+         // LOG.log(Level.SEVERE, "Could not find path.", ex.getMessage());
           ex.printStackTrace();
         }
       }
